@@ -5,15 +5,19 @@ $(window).on('load', function () {
     var $ajaxLoader = $('.ajax-load');
     var msgSteps = 0;
     var duration = 30000;
-    var stepDuration = (duration / $progressBarMessage.length) + 2;
+    var stepDuration = (duration / $progressBarMessage.length) + 1000;
     var searchData = {};
 
-    function initProgressBar() {
+    function resetProgressBar() {
       msgSteps = 0;
       $($progressBar).css('width', '0%');
       $('#show-data').hide();
       $('.table tbody').html('');
       $('#progress-bar-container').show();
+    }
+
+    function initProgressBar() {
+      resetProgressBar();
       var barProgress = $($progressBar).animate({ width: '100%' }, {
         duration,
         progress(animation, progress) {
@@ -32,6 +36,7 @@ $(window).on('load', function () {
     }
 
     function showStepMessages() {
+      console.log('Step duration: ' + stepDuration);
       if (msgSteps < $progressBarMessage.length) {
         $progressBarMessage.eq(msgSteps).show();
         window.setTimeout(function() {
@@ -75,11 +80,11 @@ $(window).on('load', function () {
 
     function getSearchUrl(searchedData) {
       var searchQuery = '';
-      var baseUrl = "https://data.cityofnewyork.us/resource/aiza-48ch.json?$limit=100&$offset=0";
+      var baseUrl = 'https://data.cityofnewyork.us/resource/aiza-48ch.json?$limit=100&$offset=0';
       var appID = (searchedData.appId ? searchedData.appId : '');
       var businessName = searchedData.businessName ? encodeURI(searchedData.businessName) : '';
       var cityName = searchedData.cityName ? encodeURI(searchedData.cityName) : '';
-
+      
       if (appID) {
         searchQuery += '&application_id=' + appID.toString();
       }
@@ -103,8 +108,7 @@ $(window).on('load', function () {
         // jsonpCallback: 'parseResults',
         statusCode: {
           503: function () {
-            // trackNL("Search Throttled");
-            userThrottled = true;
+            console.log('Status 503');
           }
         }
       });
@@ -112,6 +116,7 @@ $(window).on('load', function () {
       return $.when(xhrData)
         .then(function(xhrResult) {
           console.log('Ajax Data: ' + xhrResult);
+          searchData.response = xhrResult;
           $.each(xhrResult, function(key, row) {
             console.log('Ajax Each: ' + row.application_id);
             createRowData(row);
@@ -149,13 +154,12 @@ $(window).on('load', function () {
     function filterSearchCallback(e) {
       e.preventDefault();
       searchData.appId = $('#txt_app_id').val().trim();
-      searchData.businessName = $('#txt_business_name').val().toLowerCase().trim();
+      searchData.businessName = $('#txt_business_name').val().trim();
       searchData.cityName = $('#txt_city_name').val().trim();
       // var cityHasLetters = /[a-z]+/i.test(searchData.cityName);
-      searchData.response = getSearchedData(searchData);
-
+      getSearchedData(searchData);
       initProgressBar();
-      pageScroller();
+      // pageScroller();
     }
 
     function addEvents() {
@@ -179,17 +183,3 @@ $(window).on('load', function () {
 
     init();
 });
-
-/* Team */
-(function(){
-    // $('#team-members').owlCarousel({
-    //     items: 2,
-    //     autoplay: true,
-    //     smartSpeed: 700,
-    //     loop: true,
-    //     autoplayHoverPause: true,
-    //     nav: true,
-    //     navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
-    //     dots: false,
-    // });
-})();

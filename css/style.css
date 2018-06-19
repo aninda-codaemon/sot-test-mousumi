@@ -120,12 +120,12 @@ section {
     /*border: 1px solid #fff;*/
 }
 
-.btn-home:hover,
+/*.btn-home:hover,
 .btn-home:focus {
     color: #fff;
     background: #f4c613;
     border: 1px solid #f4c613;
-}
+}*/
 
 #arrow-down {
     position: absolute;
