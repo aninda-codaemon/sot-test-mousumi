@@ -84,7 +84,7 @@ $(window).on('load', function () {
       var appID = (searchedData.appId ? searchedData.appId : '');
       var businessName = searchedData.businessName ? encodeURI(searchedData.businessName) : '';
       var cityName = searchedData.cityName ? encodeURI(searchedData.cityName) : '';
-      
+
       if (appID) {
         searchQuery += '&application_id=' + appID.toString();
       }
@@ -131,7 +131,7 @@ $(window).on('load', function () {
     function createRowData(row) {
       console.log('loadMoreData');
       var appendData = '<tr>'
-                          + '<td class="hidden-xs">'+row.application_id+'</td>'
+                          + '<td class="hidden-xs"><a onclick="showLicenseModal()" href="javascript: void(0);" >'+row.application_id+'</a></td>'
                           + '<td class="hidden-xs">'+row.application_category+'</td>'
                           + '<td class="hidden-xs">'+row.business_name+'</td>'
                           + '<td class="hidden-xs">'+row.application_or_renewal+'</td>'
@@ -162,6 +162,11 @@ $(window).on('load', function () {
       // pageScroller();
     }
 
+    function showLicenseModal() {
+      alert('sdfs dfsd');
+      $('#myModal').modal('show');
+    }
+
     function addEvents() {
       $('#filter-search').on('click', filterSearchCallback);
 
@@ -175,6 +180,14 @@ $(window).on('load', function () {
           scrollTop: $($(this).attr('href')).offset().top
         }, 1000);
       });
+
+      $('.show-details').on('click', function(e) {
+        e.preventDefault();
+        alert('sdf sdfs');
+        $('#myModal').modal({
+          keyboard: false
+        });
+      });
     }
 
     function init() {
@@ -183,3 +196,10 @@ $(window).on('load', function () {
 
     init();
 });
+
+function showLicenseModal(){
+  alert('Data: ');
+  $("#myModal").modal('show', { keyboard: false, backdrop: true });
+  //showLicenseModalData(data); // Need to be define
+  //alert(data);
+}
