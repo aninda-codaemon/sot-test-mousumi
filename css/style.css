@@ -83,6 +83,7 @@ section {
 /*========== Home ==========*/
 
 #home {
+  background-color: rgba(0, 0, 0, 0.5);
     background: url(../video/solo.jpg) no-repeat;
     background-size: cover;
     background-attachment: fixed;
@@ -120,12 +121,12 @@ section {
     /*border: 1px solid #fff;*/
 }
 
-.btn-home:hover,
+/*.btn-home:hover,
 .btn-home:focus {
     color: #fff;
     background: #f4c613;
     border: 1px solid #f4c613;
-}
+}*/
 
 #arrow-down {
     position: absolute;
@@ -197,7 +198,7 @@ section {
 /*========== FILTER DATA ==========*/
 
 #filter-data {
-    padding: 200px 0;
+    padding: 50px 0;
 }
 
 #filter-data .form-heading {
@@ -263,6 +264,10 @@ section {
 #table-main td {
     padding: 15px 10px;
     color: #444;
+}
+
+#content-dummy {
+  padding: 150px 0;
 }
 
 /*========== FOOTER ==========*/
