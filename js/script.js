@@ -69,15 +69,6 @@ $(window).on('load', function () {
       });
     }
 
-    function showPageLoader() {
-      $ajaxLoader.show();
-      window.setTimeout(function() {
-        $ajaxLoader.hide();
-        loadMoreData();
-        shouldLoadData = true;
-      }, 5000);
-    }
-
     function getSearchUrl(searchedData) {
       var searchQuery = '';
       var baseUrl = 'https://data.cityofnewyork.us/resource/aiza-48ch.json?$limit=100&$offset=0';
@@ -120,18 +111,59 @@ $(window).on('load', function () {
           $.each(xhrResult, function(key, row) {
             console.log('Ajax Each: ' + row.application_id);
             createRowData(row);
+            createModalContent(row);
           });
           // After the fetching and calculation is done
           // Start the progress bar
           // startTheProgressBar();
-          return teaserDataObj;
+          return teaserObj;
         });
+    }
+
+    function createModalContent(row) {
+      console.log('create modal content');
+
+      var modalData = '<div class="modal-application-content" id="'+row.application_id+'">'
+                        + '<div class="row">'
+                          + '<div class="col-md-6">'
+                            + 'Application#: <span>'+row.application_id+'</span>'
+                          + '</div>'
+                          + '<div class="col-md-6">'
+                            + 'Application Category: <span>'+row.application_category+'</span>'
+                          + '</div>'
+                        + '</div>'
+                        + '<div class="row">'
+                          + '<div class="col-md-6">'
+                            + 'Application/Renewal: <span>'+row.application_or_renewal+'</span>'
+                          + '</div>'
+                          + '<div class="col-md-6">'
+                            + 'Business Name: <span>'+row.business_name+'</span>'
+                          + '</div>'
+                        + '</div>'
+                        + '<div class="row">'
+                          + '<div class="col-md-6">'
+                            + 'License#: <span>'+(row.license_number?row.license_number:'N/A')+'</span>'
+                          + '</div>'
+                          + '<div class="col-md-6">'
+                            + 'License Category: <span>'+(row.license_category?row.license_category:'N/A')+'</span>'
+                          + '</div>'
+                        + '</div>'
+                        + '<div class="row">'
+                          + '<div class="col-md-6">'
+                            + 'License Type: <span>'+(row.license_type?row.license_type:'N/A')+'</span>'
+                          + '</div>'
+                          + '<div class="col-md-6">'
+                            + 'Application Status: <span>'+row.status+'</span>'
+                          + '</div>'
+                        + '</div>'
+                      + '</div>';
+      $('.modal-content').append(modalData);
     }
 
     function createRowData(row) {
       console.log('loadMoreData');
       var appendData = '<tr>'
-                          + '<td class="hidden-xs"><a onclick="showLicenseModal()" href="javascript: void(0);" >'+row.application_id+'</a></td>'
+                          + '<td class="hidden-xs"><a title="Click to view application details" onclick="showLicenseModal(\''+row.application_id.trim()+'\')" href="javascript: void(0);" >'+row.application_id+'</a></td>'
                           + '<td class="hidden-xs">'+row.application_category+'</td>'
                           + '<td class="hidden-xs">'+row.business_name+'</td>'
                           + '<td class="hidden-xs">'+row.application_or_renewal+'</td>'
@@ -160,11 +192,6 @@ $(window).on('load', function () {
       getSearchedData(searchData);
       initProgressBar();
       // pageScroller();
-    }
-
-    function showLicenseModal() {
-      alert('sdfs dfsd');
-      $('#myModal').modal('show');
     }
 
     function addEvents() {
@@ -197,9 +224,14 @@ $(window).on('load', function () {
     init();
 });
 
-function showLicenseModal(){
-  alert('Data: ');
-  $("#myModal").modal('show', { keyboard: false, backdrop: true });
+function showLicenseModal(app_id){
+  $('.modal-application-content').hide();
+  $("#myModal").modal('show', { keyboard: true, backdrop: true });
+  $('.ajax-load').show();
+  window.setTimeout(function() {
+    $('.ajax-load').hide();
+    $('#' + app_id).show();
+  }, 5000);
   //showLicenseModalData(data); // Need to be define
   //alert(data);
 }
