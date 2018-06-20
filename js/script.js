@@ -12,6 +12,7 @@ $(window).on('load', function () {
       msgSteps = 0;
       $($progressBar).css('width', '0%');
       $('#show-data').hide();
+      $('.error-msg').hide();
       $('.table tbody').html('');
       $('#progress-bar-container').show();
     }
@@ -96,27 +97,30 @@ $(window).on('load', function () {
       var xhrData = $.ajax({
         url: getSearchUrl(searchedData),
         dataType: 'json',
-        // jsonpCallback: 'parseResults',
         statusCode: {
           503: function () {
             console.log('Status 503');
           }
         }
       });
-      excessResults = false;
+      var isMoreResults = false;
       return $.when(xhrData)
         .then(function(xhrResult) {
           console.log('Ajax Data: ' + xhrResult);
           searchData.response = xhrResult;
-          $.each(xhrResult, function(key, row) {
-            console.log('Ajax Each: ' + row.application_id);
-            createRowData(row);
-            createModalContent(row);
-          });
-          // After the fetching and calculation is done
-          // Start the progress bar
-          // startTheProgressBar();
-          return teaserObj;
+
+          if (xhrResult.length > 0) {
+            if (xhrResult.length > 0) {
+              isMoreResults = true;
+            }
+            $.each(xhrResult, function(key, row) {
+              console.log('Ajax Each: ' + row.application_id);
+              createRowData(row);
+              createModalContent(row);
+            });
+          } else {
+            $('.error-msg').show();
+          }
         });
     }
 
@@ -208,28 +212,30 @@ $(window).on('load', function () {
       });
 
       $('#txt_app_id').keypress(function(e) {
-        e.preventDefault();
         var regex = new RegExp("^[a-zA-Z0-9-\b]+$");
         var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
         if (regex.test(str)) {
-            $('#txt_app_id').removeClass('custom-input-error');
-            return true;
+          $(this).removeClass('custom-input-error');
+          return true;
         }else{
-            $('#txt_app_id').addClass('custom-input-error');
-        }        
+          $(this).addClass('custom-input-error');
+        }
+
+        e.preventDefault();
         return false;
       });
 
       $('#txt_city_name').keypress(function(e) {
-        e.preventDefault();
         var regex = new RegExp("^[a-zA-Z \b]+$");
         var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
         if (regex.test(str)) {
-            $('#txt_city_name').removeClass('custom-input-error');
-            return true;
+          $(this).removeClass('custom-input-error');
+          return true;
         }else{
-            $('#txt_city_name').addClass('custom-input-error');
+          $(this).addClass('custom-input-error');
         }
+
+        e.preventDefault();
         return false;
       });
     }

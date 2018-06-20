@@ -235,6 +235,9 @@ section {
 }
 
 /*========== SHOW DATA ==========*/
+.error-msg {
+  display: none; 
+}
 
 #show-data {
     padding-bottom: 50px;
