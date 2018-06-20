@@ -188,10 +188,9 @@ $(window).on('load', function () {
       searchData.appId = $('#txt_app_id').val().trim();
       searchData.businessName = $('#txt_business_name').val().trim();
       searchData.cityName = $('#txt_city_name').val().trim();
-      // var cityHasLetters = /[a-z]+/i.test(searchData.cityName);
+
       getSearchedData(searchData);
       initProgressBar();
-      // pageScroller();
     }
 
     function addEvents() {
@@ -208,12 +207,30 @@ $(window).on('load', function () {
         }, 1000);
       });
 
-      $('.show-details').on('click', function(e) {
+      $('#txt_app_id').keypress(function(e) {
         e.preventDefault();
-        alert('sdf sdfs');
-        $('#myModal').modal({
-          keyboard: false
-        });
+        var regex = new RegExp("^[a-zA-Z0-9-\b]+$");
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+            $('#txt_app_id').removeClass('custom-input-error');
+            return true;
+        }else{
+            $('#txt_app_id').addClass('custom-input-error');
+        }        
+        return false;
+      });
+
+      $('#txt_city_name').keypress(function(e) {
+        e.preventDefault();
+        var regex = new RegExp("^[a-zA-Z \b]+$");
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+            $('#txt_city_name').removeClass('custom-input-error');
+            return true;
+        }else{
+            $('#txt_city_name').addClass('custom-input-error');
+        }
+        return false;
       });
     }
 

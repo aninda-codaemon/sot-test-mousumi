@@ -83,8 +83,7 @@ section {
 /*========== Home ==========*/
 
 #home {
-  background-color: rgba(0, 0, 0, 0.5);
-    background: url(../video/solo.jpg) no-repeat;
+    background: url(../img/solo.jpg) no-repeat;
     background-size: cover;
     background-attachment: fixed;
     height: 100vh;
@@ -196,6 +195,10 @@ section {
 }
 
 /*========== FILTER DATA ==========*/
+
+#filter-data .custom-input-error {
+    border: 2px solid #EA4335;
+}
 
 #filter-data {
     padding: 50px 0;
